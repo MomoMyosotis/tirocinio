@@ -493,7 +493,8 @@ $string['other'] = 'Altro';
 
 $string['reading_modality'] = 'Modalità prova lettura';
 $string['errors'] = 'Errori';
-$string['time'] = 'Tempo';
+$string['time'] = 'Tempo
+(in secondi)';
 
 $string['lowercase_writing'] = 'Stampatello minuscolo';
 $string['uppercase_writing'] = 'Stampato maiuscolo';

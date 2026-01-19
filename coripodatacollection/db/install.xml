@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/coripodatacollection/db" VERSION="20250523" COMMENT="XMLDB file for Moodle mod_coripodatacollection"
+<XMLDB PATH="mod/coripodatacollection/db" VERSION="20260118" COMMENT="XMLDB file for Moodle mod_coripodatacollection"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -113,6 +113,7 @@
         <FIELD NAME="can_edit_val_post" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="outlier_pre" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="outlier_post" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="metodo_didattico" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="(chiedere gentilmente di essere concisi)"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
