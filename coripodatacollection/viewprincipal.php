@@ -57,7 +57,7 @@ $modulecontext = context_module::instance($cm->id);
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
-$PAGE->add_body_class('mediumwidth');
+$PAGE->add_body_class('wide');
 
 $page = optional_param('page', 'classes', PARAM_TEXT);
 

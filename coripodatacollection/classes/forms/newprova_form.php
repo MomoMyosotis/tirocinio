@@ -72,7 +72,7 @@ class newprova_form extends \moodleform {
 
         $table->id = 'result_table';
         $table->head = [
-                '', '', '', '',
+                '', '', '',
                 get_string('reading', 'mod_coripodatacollection'),
                 get_string('writing', 'mod_coripodatacollection'),
                 get_string('math', 'mod_coripodatacollection'),
@@ -92,15 +92,17 @@ class newprova_form extends \moodleform {
         $table->align = ['center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;',
                 'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;',
                 'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;',
-                'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;'];
-        $table->headspan = [1, 1, 1, 1, 10, 4, 16, 6];
+                'center; border: 1px solid lightgrey;'];
+        $table->headspan = [1, 1, 1, 10, 4, 16, 6];
         $table->colclasses = ['gradecell grade i4 overridden grade_type_value cell c2'];
         $htmlstringtable .= substr( $head = html_writer::table($table), 0, strpos($head, '</thead>'));
 
         // Generazione heading della tabella.
         $table = new \html_table();
         $table->head = [
-                '', '', '', '',
+                '', '',
+                get_string('NAI', 'mod_coripodatacollection'),
+                '',
                 get_string('phonemes', 'mod_coripodatacollection'),
                 get_string('syllables_cv', 'mod_coripodatacollection'),
                 get_string('syllables_cvc', 'mod_coripodatacollection'),
@@ -143,14 +145,14 @@ class newprova_form extends \moodleform {
         $data = [
                 '',
                 get_string('student', 'mod_coripodatacollection'),
+                get_string('NAI', 'mod_coripodatacollection'),
                 get_string('partial_result', 'mod_coripodatacollection'),
-                get_string('didatic_method', 'mod_coripodatacollection')
         ];
 
         foreach ($table->headspan as $i => $val) {
-            if ($i<4) {
+            if ($i<3) {
                 continue;
-            } elseif ($i == 23) {
+            } elseif ($i == 22) {
                 $data[] = get_string('test_administration', 'mod_coripodatacollection');
             } elseif ($val == 1) {
                 $data[] = get_string('errors', 'mod_coripodatacollection');
@@ -196,7 +198,7 @@ class newprova_form extends \moodleform {
             foreach ($arrayvalutazione as $key => $val) {
                 if ($key == 'id' || $key == 'classe' || $key == 'alunno' || $key == 'periodo' || $key == 'erogazione'
                         || $key == 'difficolta_prerinforzo' || $key == 'lettura_parolecons_tempo' || $key == 'lettura_parolecons_errori'
-                        || $key == 'scrittura_parolecons_errori' || $key == 'scrittura_paroleort_errori'
+                        || $key == 'scrittura_parolecons_errori' || $key == 'scrittura_paroleort_errori' || $key == 'metodo_didattico'
                         || $key == 'lettura_modalita' || $key == 'includi_calcolo' || $key == 'matematica_trasforma_cifre_errori') {
                     continue;
                 } elseif ($key == 'numeroregistro' || $key == 'cn') {
@@ -206,7 +208,7 @@ class newprova_form extends \moodleform {
 
                 if ($editmode) {
                     $nomeelemento = $key . '[' . $idvalutazione . ']';
-                    if ($key == 'proveaccessorie' || $key == 'inserimento_parziale') {
+                    if ($key == 'proveaccessorie' || $key == 'inserimento_parziale' || $key == 'NAI') {
                         $selections = [
                                 'Sì' => get_string('yes', 'mod_coripodatacollection'),
                                 'No' => get_string('no', 'mod_coripodatacollection')
@@ -218,23 +220,7 @@ class newprova_form extends \moodleform {
                         ];
                         $cellatabella = html_writer::select($selections, $nomeelemento,empty($val) ? 'No' : $val,
                                 [], $options);
-                    } elseif ($key == 'metodo_didattico') {
-                        $selections = [
-                                '' => '',
-                                get_string('phonosyllabic', 'mod_coripodatacollection') => get_string('phonosyllabic', 'mod_coripodatacollection'),
-                                get_string('sillabic', 'mod_coripodatacollection') => get_string('sillabic', 'mod_coripodatacollection'),
-                                get_string('global', 'mod_coripodatacollection') => get_string('global', 'mod_coripodatacollection'),
-                                get_string('siglo', 'mod_coripodatacollection') => get_string('siglo', 'mod_coripodatacollection'),
-                                get_string('other', 'mod_coripodatacollection') => get_string('other', 'mod_coripodatacollection'),
-                        ];
-                        $options = [
-                                'type' => 'number',
-                                'class' => 'form-control statusicons',
-                                'style' => 'width: 200px; margin: 0 auto; display: block; text-align: center;'
-                        ];
-                        $cellatabella = html_writer::select($selections, $nomeelemento,empty($val) ? '' : $val,
-                                [], $options);
-                    }else {
+                    } else {
                         $options = [
                                 'type' => 'number',
                                 'name' => $nomeelemento,
@@ -520,7 +506,7 @@ class newprova_form extends \moodleform {
                     foreach ($data as $field => $listanuovirisultati) {
                         if (!empty($listanuovirisultati[$id])) {
                             if ($field == 'proveaccessorie' || $field == 'difficolta_prerinforzo' || $field == 'lettura_modalita'
-                                    || $field == 'inserimento_parziale' || $field == 'metodo_didattico') {
+                                    || $field == 'inserimento_parziale' || $field == 'metodo_didattico' || $field == 'NAI') {
                                 $nuovorisultato[$field] = strval($listanuovirisultati[$id]);
                             } else {
                                 $nuovorisultato[$field] = floatval($listanuovirisultati[$id]);
@@ -607,7 +593,39 @@ class newprova_form extends \moodleform {
         global $OUTPUT, $PAGE, $DB;
         $mform = $this->_form;
 
-        $stickyhtml = \html_writer::start_div();
+        $stickyhtml = '';
+        $classic_display = true;
+
+        $editmode = false;
+        if (isset($this->_customdata['editmode'])) {
+            $editmode = $this->_customdata['editmode'];
+        }
+        if (!$editmode) {
+            $page_param = $PAGE->url->params();
+            $class = $DB->get_record('coripodatacollection_classes', ['id' => $page_param['classid']]);
+            if ($page_param['page'] = 'primevalutazioni' and !empty($class->metodo_didattico)) {
+                $stickyhtml .= \html_writer::start_div('',
+                        ['style' => 'display: flex; justify-content: space-between; text-align: center;']);
+                $stickyhtml .= \html_writer::start_div('', ['style' => 'display: block; text-align: center;']);
+                $stickyhtml .= html_writer::tag('h5', 'Metodo didattico:');
+                $stickyhtml .= html_writer::tag('strong', $class->metodo_didattico, ['style' => 'color: lightgray;']);
+                $stickyhtml .= \html_writer::end_div();
+                $stickyhtml .= \html_writer::start_div('',
+                        ['style' => 'display: flex; text-align: center; align-items: center;']);
+                $page_param['change_didactic_method'] = true;
+                $url = new moodle_url('/mod/coripodatacollection/viewteacher.php', $page_param);
+                $stickyhtml .= html_writer::tag('a',
+                        'Modifica metodo didattico',
+                        ['href' => $url, 'class' => 'btn btn-secondary', 'style' => 'display: inline-block; margin-left:10px;']
+                );
+                $stickyhtml .= \html_writer::end_div();
+                $stickyhtml .= \html_writer::end_div();
+
+                $classic_display = false;
+            }
+        }
+
+        $stickyhtml .= \html_writer::start_div('', ['style' => 'display: block;']);
 
         if (is_null($submitlabel)) {
             $stickyhtml.= html_writer::tag('a',
@@ -675,7 +693,11 @@ class newprova_form extends \moodleform {
         }
         $stickyhtml .= \html_writer::end_div();
 
-        $stickyfooter = new sticky_footer($stickyhtml);
+        if ($classic_display)
+            $stickyfooter = new sticky_footer($stickyhtml);
+        else
+            $stickyfooter = new sticky_footer($stickyhtml, ' ',
+                    ['style' => 'display: flex; justify-content: space-between;']);
         $mform->addElement('html', $OUTPUT->render($stickyfooter));
 
     }

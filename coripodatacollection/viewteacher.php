@@ -55,7 +55,7 @@ $modulecontext = context_module::instance($cm->id);
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
-$PAGE->add_body_class('mediumwidth');
+$PAGE->add_body_class('wide');
 
 $classid = optional_param('classid', -1, PARAM_INT);
 $class = $DB->get_record('coripodatacollection_classes', ['id' => $classid]);
@@ -354,6 +354,27 @@ if ($page == 'primevalutazioni') {
         redirect($returnpage);
     }
 
+    // Gestione form di popup per metodo didattico.
+    $change_didactic_method = optional_param('change_didactic_method', false, PARAM_BOOL);
+    if (($editmode and empty($class->metodo_didattico)) or $change_didactic_method) {
+        $actualpage = new moodle_url('/mod/coripodatacollection/viewteacher.php',
+                ['id' => $id, 'page' => 'primevalutazioni', 'classid' => $classid,
+                        'editmode' => $editmode, 'change_didactic_method' => $change_didactic_method]);
+        $didactic_method_form = new \mod_coripodatacollection\forms\didactic_method_popup($actualpage,
+                ['idclasse' => $classid, 'editmode' => $editmode]);
+        if ($didactic_method_form->is_cancelled()) {
+            redirect($returnpage);
+        } else if ($data = $didactic_method_form->get_data()) {
+
+            $class->metodo_didattico = $data->confirmoptions == 'altro' ? $data->othermethod : $data->confirmoptions;
+
+            $DB->update_record('coripodatacollection_classes', $class);
+            $returnpage = new moodle_url('/mod/coripodatacollection/viewteacher.php',
+                    ['id' => $id, 'page' => 'primevalutazioni', 'classid' => $classid, 'editmode' => !$change_didactic_method]);
+            redirect($returnpage);
+        }
+    }
+
     if ($evaluationtable->is_cancelled()) {
         if ($editmode) {
             redirect($returnpage);
@@ -649,11 +670,12 @@ if ($page == 'alunni') {
     $table->id = 'student_table';
     if ($class->pluriclasse == 1) {
         $table->align =
-                ['center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center'];
+                ['center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center'];
         $table->head = [
                 '',
                 get_string('surname', 'mod_coripodatacollection'),
                 get_string('name', 'mod_coripodatacollection'),
+                get_string('code', 'mod_coripodatacollection'),
                 get_string('freq_year', 'mod_coripodatacollection'),
                 get_string('consensus', 'mod_coripodatacollection'),
                 get_string('born_in_italy', 'mod_coripodatacollection'),
@@ -668,11 +690,12 @@ if ($page == 'alunni') {
         ];
     } else {
         $table->align =
-                ['center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center'];
+                ['center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center'];
         $table->head = [
                 '',
                 get_string('surname', 'mod_coripodatacollection'),
                 get_string('name', 'mod_coripodatacollection'),
+                get_string('code', 'mod_coripodatacollection'),
                 get_string('consensus', 'mod_coripodatacollection'),
                 get_string('born_in_italy', 'mod_coripodatacollection'),
                 get_string('language_difficulty', 'mod_coripodatacollection'),
@@ -736,6 +759,7 @@ if ($page == 'alunni') {
                             $r->numeroregistro,
                             $r->cognome,
                             $r->nome,
+                            $r->hash_code,
                             $select_year[$r->annofrequentazione],
                             $cie . $consenso,
                             returnNoInfo($r->natoinitalia),
@@ -752,6 +776,7 @@ if ($page == 'alunni') {
                             $r->numeroregistro,
                             $r->cognome,
                             $r->nome,
+                            $r->hash_code,
                             $cie . $consenso,
                             returnNoInfo($r->natoinitalia),
                             returnNoInfo($r->difficoltalinguaggio),
@@ -771,6 +796,7 @@ if ($page == 'alunni') {
                             $r->numeroregistro,
                             $r->cognome,
                             $r->nome,
+                            $r->hash_code,
                             $select_year[$r->annofrequentazione],
                             $cie . $consenso,
                             returnNoInfo($r->natoinitalia),
@@ -787,6 +813,7 @@ if ($page == 'alunni') {
                             $r->numeroregistro,
                             $r->cognome,
                             $r->nome,
+                            $r->hash_code,
                             $cie . $consenso,
                             returnNoInfo($r->natoinitalia),
                             returnNoInfo($r->difficoltalinguaggio),
@@ -816,6 +843,24 @@ if ($page == 'alunni') {
     $newalunno->display();
 
 } elseif ($page == 'primevalutazioni') {
+
+    if (($editmode and empty($class->metodo_didattico)) or $change_didactic_method) {
+        $didactic_method_form_render = $didactic_method_form->render();
+
+        $popup_didactic_method_param = [
+                'title' => get_string('didatic_method', 'mod_coripodatacollection'),
+                'description' => get_string('didatic_method_popup_desc', 'mod_coripodatacollection'),
+                'formhtml' => $didactic_method_form_render,
+        ];
+
+        echo $OUTPUT->render_from_template(
+                'mod_coripodatacollection/didacticmethodpopup',
+                $popup_didactic_method_param
+        );
+        echo $OUTPUT->box_end();
+        echo $OUTPUT->footer();
+        die();
+    }
 
     $res_missing = optional_param('resmissing', false, PARAM_BOOL);
     if ($res_missing) {

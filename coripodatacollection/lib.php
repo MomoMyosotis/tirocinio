@@ -2050,6 +2050,7 @@ function send_erogation_students_csv($course) {
             get_string('centoquattro_law_table', 'mod_coripodatacollection'),
             get_string('centoquattro_problem_table', 'mod_coripodatacollection'),
             get_string('partial_result', 'mod_coripodatacollection'),
+            get_string('NAI', 'mod_coripodatacollection'),
             get_string('didatic_method', 'mod_coripodatacollection')
     ];
 

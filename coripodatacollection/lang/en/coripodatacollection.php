@@ -215,14 +215,14 @@ $string['save_institute'] = 'Salva istituto';
 
 // --------------------------------------------------- Classes page ------------------------------------------------------------- //
 $string['census_period'] = 'Periodo censimento:';
-$string['pre_reinforce_period'] = 'Periodo pre-rinforzo:';
-$string['post_reinforce_period'] = 'Periodo post-rinforzo:';
+$string['pre_reinforce_period'] = 'Periodo pre-potenziamento:';
+$string['post_reinforce_period'] = 'Periodo post-potenziamento:';
 $string['modify_periods'] = 'Modifica periodi';
 $string['numberstudents_registered'] = 'Numero studenti censiti';
 $string['numberstudents_identity'] = 'Numero studenti con carta d\'identita\'';
 $string['numberstudents_consensus'] = 'Numero studenti con consenso';
-$string['pre-reinforce_results'] = 'Risultati prerinforzo inseriti';
-$string['post-reinforce_results'] = 'Risultati postrinforzo inseriti';
+$string['pre-reinforce_results'] = 'Risultati pre potenziamento inseriti';
+$string['post-reinforce_results'] = 'Risultati post potenziamento inseriti';
 $string['getcsvbutton'] = 'Scarica CSV info';
 $string['select_istitute'] = 'Selezionare l\'istituto nel quale si vuole aggiungere la classe';
 $string['select_istitute_import'] = 'Selezionare l\'istituto dal quale si vogliono importare le classi';
@@ -240,7 +240,7 @@ $string['language_difficulty'] = 'Difficoltà nel linguaggio';
 $string['home_language'] = 'Lingua parlata a casa';
 $string['nursery_school_freq'] = 'Frequenza scuola infanzia';
 $string['nursery_school_difficulty'] = 'Difficoltà nella scuola d\'infanzia';
-$string['difficulty_noted'] = 'Difficoltà notata';
+$string['difficulty_noted'] = 'FAMILIARITÀ PER DISTURBI APPRENDIMENTO';
 $string['centoquattro_law_table'] = 'Legge 104';
 $string['centoquattro_problem_table'] = 'Problematica legge 104';
 $string['consensus_given'] = 'Consenso dato';
@@ -256,9 +256,11 @@ $string['missing_results_message'] = 'Attenzione, uno o più risultati risultano
 statistici può essere eseguito ma questi non saranno valori completi.';
 $string['missing_results_message_teacher'] = 'Attenzione, uno o più risultati risultano non registrati, completare correttamente 
 l\'inserimento dei dati. I dati si considerano completi quando, per ogni alunno, una di queste condizioni si verifica:';
+$string['complete_text_field'] = 'Attenzione, completare il campo!';
 $string['missing_results_message_teacher_case_1'] = 'Le prove di lettura, scrittura e matematica sono state inserite totalmente';
 $string['missing_results_message_teacher_case_2'] = 'Le prove accessorie sono state inserite totalmente';
 $string['missing_results_message_teacher_case_3'] = 'Si dichiara esplicitamente l\'inserimento parziale dei risultati';
+$string['NAI'] = 'NAI'; // n < 2
 
 $string['new_results_title'] = 'Nuovi risultati inseriti: ';
 $string['new_results_message'] = 'Attenzione, sono stati inseriti nuovi risultati, eseguire ricalcolo statistiche';
@@ -273,10 +275,10 @@ saranno disponibili';
 $string['ending_evaluation_complete_message'] = 'Le valutazioni finali sono state confermate.';
 $string['stats_calculated_title'] = 'Statistiche calcolate';
 $string['stats_calculated_message_pre'] = 'la media e la deviazione standard di tutti gli alunni della popolazione sono stati 
-calcolati per la fase precedente il rinforzo. Questi valori possono essere visti all\'interno della pagina delle valutazioni finali 
+calcolati per la fase precedente il potenziamento. Questi valori possono essere visti all\'interno della pagina delle valutazioni finali 
 degli alunni che, classe per classe, sono stati fatti passare alla seconda fase della valutazione';
 $string['stats_calculated_message_post'] = 'la media e la deviazione standard di tutti gli alunni della popolazione sono stati 
-calcolati per la fase seguente il rinforzo. Questi valori possono essere visti all\'interno della pagina delle valutazioni finali 
+calcolati per la fase seguente il potenziamento. Questi valori possono essere visti all\'interno della pagina delle valutazioni finali 
 degli alunni che, classe per classe, sono stati fatti passare alla seconda fase della valutazione';
 $string['index_missing_title'] = 'Indici mancanti: ';
 $string['index_missing_body'] = 'è possibile procedere al colcolo di media e deviazione standard globali, tuttavia non di tutte le 
@@ -286,9 +288,9 @@ completamento, poi un bottone permetterà di eseguire i calcoli globali.';
 
 $string['reopen_allert_title'] = 'Richiesta riapertura modifica risultati: ';
 $string['reopen_allert_message_pre'] = 'L\'insegnante di questa classe richiede di poter modificare la tabella risultati 
-prerinforzo';
+pre-potenziamento';
 $string['reopen_allert_message_post'] ='L\'insegnante di questa classe richiede di poter modificare la tabella risultati 
-postrinforzo';
+post-potenziamento';
 
 $string['allow_modify_results'] = 'Consenti modifica valutazioni';
 $string['block_modify_results'] = 'Blocca modifica valutazioni';
@@ -399,23 +401,23 @@ $string['definitive_groups'] = 'Gruppi definitivi';
 $string['census_of_period'] = 'Periodo di censimento';
 $string['start_census'] = 'Inzio censimento';
 $string['end_census'] = 'Fine censimento';
-$string['prereinforce_period'] = 'Periodo registrazione valutazioni pre-rinforzo';
+$string['prereinforce_period'] = 'Periodo registrazione valutazioni pre-potenziamento';
 $string['start_reg_val_pre'] = 'Inizio registrazione valutazioni';
 $string['end_reg_val_pre'] = 'Fine registrazione valutazioni';
-$string['postreinforce_period'] = 'Periodo registrazione valutazioni post-rinforzo';
+$string['postreinforce_period'] = 'Periodo registrazione valutazioni post-potenziamento';
 $string['start_reg_val_post'] = 'Inizio registrazione valutazioni';
 $string['end_reg_val_post'] = 'Fine registrazione valutazioni';
 
 $string['start_census_help'] = 'Indicare la data di apertura della fase di censimento';
 $string['end_census_help'] = 'Indicare la data di chiusura della fase di censimento. Attenzione: questa data non deve essere postera
-rispetto alla data di inzio della fase di registrazioine delle valutazioni pre-rinforzo.';
-$string['start_reg_val_pre_help'] = 'Indicare la data di apertura della fase di registrazione dei risultati pre-rinforzo. 
+rispetto alla data di inzio della fase di registrazioine delle valutazioni pre-potenziamento.';
+$string['start_reg_val_pre_help'] = 'Indicare la data di apertura della fase di registrazione dei risultati pre-potenziamento. 
 Attenzione: questa data non deve essere precedente alla data di fine della fase di censimento';
-$string['end_reg_val_pre_help'] = 'Indicare la data di chiusura della fase di registrazione dei risultati pre-rinforzo.
- Attenzione: questa data non deve essere postera rispetto alla data di inzio della fase di registrazioine delle valutazioni post-rinforzo.';
-$string['start_reg_val_post_help'] = 'Indicare la data di apertura della fase di registrazione dei risultati post-rinforzo. 
-Attenzione: questa data non deve essere precedente alla data di fine della fase di registrazione dei risultati pre-rinforzo';
-$string['end_reg_val_post_help'] = 'Indicare la data di chiusura della fase di registrazione dei risultati post-rinforzo';
+$string['end_reg_val_pre_help'] = 'Indicare la data di chiusura della fase di registrazione dei risultati pre-potenziamento.
+ Attenzione: questa data non deve essere postera rispetto alla data di inzio della fase di registrazioine delle valutazioni post-potenziamento.';
+$string['start_reg_val_post_help'] = 'Indicare la data di apertura della fase di registrazione dei risultati post-potenziamento. 
+Attenzione: questa data non deve essere precedente alla data di fine della fase di registrazione dei risultati pre-potenziamento';
+$string['end_reg_val_post_help'] = 'Indicare la data di chiusura della fase di registrazione dei risultati post-potenziamento';
 
 
 
@@ -426,7 +428,7 @@ $string['writing'] = 'Scrittura';
 $string['math'] = 'Matematica';
 $string['export_table'] = 'Esporta tabella';
 
-$string['test_administration'] = 'Somministrazione parziale delle prove';
+$string['test_administration'] = 'Necessità somministrazione prove accessorie (protocollo completo non applicabile)';
 $string['syllables_fusion'] = 'Fusione sillabica';
 $string['cv_syllables_analyses'] = 'Analisi sillabe CV';
 $string['cvc_syllables_analyses'] = 'Analisi sillabe CVC';
@@ -478,13 +480,18 @@ $string['writing_correctness'] = 'Correttezza scrittura';
 $string['math_reading_correctness'] = 'Matematica transcodifica';
 $string['math_enumeration_correctness'] = 'Matematica enumerazione';
 $string['math_decoding_correctness'] = 'Matematica ordinamento';
-$string['math_calculus_correctness'] = 'Matematica calolo';
+$string['math_calculus_correctness'] = 'Matematica calcolo';
 
 $string['student'] = 'Alunno';
 $string['precedent_observation_difficulties'] = 'Nella precedente valutazione il bambino aveva mostrato delle difficoltà in alcune aree?';
 $string['precedent_observation_difficulties_v2'] = 'Difficoltà nella precedente osservazione';
+$string['NAI'] = 'NAI'; // n < 2
 $string['partial_result'] = 'Inserimento parziale risultati';
+
 $string['didatic_method'] = 'Metodo didattico';
+$string['didatic_method_popup_desc'] = 'Inserire il metodo didattico usato per la classe. Attenzione, nel caso il metodo usato non sia presente tra i metodi elencati, selezionare "Altro" e indicare il metodo usato.
+Sarà possibile modificare il metodo inserito tramite apposito pulsante dalla pagina precedente.';
+$string['other_didatic_method'] = 'Specificare altro metodo';
 $string['phonosyllabic'] = 'Fonosillabico';
 $string['sillabic'] = 'Sillabico';
 $string['global'] = 'Globale';
@@ -493,8 +500,7 @@ $string['other'] = 'Altro';
 
 $string['reading_modality'] = 'Modalità prova lettura';
 $string['errors'] = 'Errori';
-$string['time'] = 'Tempo
-(in secondi)';
+$string['time'] = 'Tempo [secondi]';
 
 $string['lowercase_writing'] = 'Stampatello minuscolo';
 $string['uppercase_writing'] = 'Stampato maiuscolo';
@@ -602,8 +608,8 @@ $string['error_buttontoinstituteadmin'] = 'Amministrazione istituto';
 $string['no_class_for_plex'] = 'Nessuna classe censita per il plesso';
 $string['total_students'] = 'Studenti totali';
 $string['partecipant_students'] = 'Studenti partecipanti';
-$string['registered_results_pre'] = 'Risultati inseriti pre-rinforzo';
-$string['registered_results_post'] = 'Risultati inseriti post-rinforzo';
+$string['registered_results_pre'] = 'Risultati inseriti pre-potenziamento';
+$string['registered_results_post'] = 'Risultati inseriti post-potenziamento';
 $string['status'] = 'Status';
 $string['view_class'] = 'Vedi classe';
 $string['missing_students'] = 'Studenti mancanti';
@@ -665,7 +671,7 @@ $string['send_notification_post_message'] = 'Il completamento dell\'inserimento 
 Attenzione: qualsiasi modifica alla tabella ritirerà la notifica di completamento';
 $string['send_reopen_title'] = 'Notifica riapertura modifica inviata: ';
 $string['send_reopen_pre_message'] = 'è stata inviata una notifica a tutti gli amministratori del progetto riguardo la sua richiesta 
-di modificare la tabella risultati prerinforzo.';
+di modificare la tabella risultati pre-potenziamento.';
 $string['get_participation_certificate'] = 'Scarica certificato di partecipazione';
 
 //--------------------------------------------------- New student form -----------------------------------------------------------//
@@ -776,11 +782,11 @@ $string['addnewclass'] = 'Nuova classe';
 
 // ----------------------------------------------------- CLASS PAGE ------------------------------------------------------------- //
 $string['alunni'] = 'Alunni della classe';
-$string['primevalutazioni'] = 'Valutazioni pre-rinforzo';
-$string['ultimevalutazioni'] = 'Valutazioni post-rinforzo';
+$string['primevalutazioni'] = 'Valutazioni pre-potenziamento';
+$string['ultimevalutazioni'] = 'Valutazioni post-potenziamento';
 $string['addnewalunno'] = 'Aggiungi alunno';
 $string['pdf_alunni'] = 'Scarica tabella alunni';
-$string['director_notification'] = 'Notifica direttori';
+$string['director_notification'] = 'Notifica dirigenti scolastici';
 $string['pdf_reported'] = 'Scarica PDF';
 $string['pdf_risultati'] = 'Scarica tabella risultati';
 $string['result_reopen'] = 'Richiedi modifica risultati';

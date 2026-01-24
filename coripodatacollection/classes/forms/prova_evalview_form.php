@@ -108,7 +108,9 @@ class prova_evalview_form extends \moodleform {
         // Generazione heading della tabella.
         $table = new \html_table();
         $table->head = [
-                '', '', '', '', '',
+                '', '', '', '',
+                get_string('NAI', 'mod_coripodatacollection'),
+                '',
                 get_string('phonemes', 'mod_coripodatacollection'),
                 get_string('syllables_cv', 'mod_coripodatacollection'),
                 get_string('syllables_cvc', 'mod_coripodatacollection'),

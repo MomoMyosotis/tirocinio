@@ -113,7 +113,7 @@
         <FIELD NAME="can_edit_val_post" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="outlier_pre" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="outlier_post" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="metodo_didattico" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="(chiedere gentilmente di essere concisi)"/>
+        <FIELD NAME="metodo_didattico" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
