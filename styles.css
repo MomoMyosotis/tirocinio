@@ -1,0 +1,140 @@
+.fixed-table-wrapper {
+    max-height: 600px;
+}
+.fixed-table-thirdcol-wrapper {
+    max-height: 1000px;
+}
+.fixed-table-stats-wrapper{
+    max-height: 1000px;
+}
+.fixed-table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.fixed-table thead {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 3;
+}
+.fixed-table th:nth-child(2), .fixed-table td:nth-child(2) {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+}
+.fixed-table thead th:nth-child(2) {
+    background-color: #fff;
+}
+.fixed-table thead td:nth-child(2) {
+    background-color: #fff;
+}
+.fixed-table tbody tr:nth-child(odd) td:nth-child(2) {
+    background-color: #f9f9f9;
+}
+.fixed-table tbody tr:nth-child(even) td:nth-child(2) {
+    background-color: #ffffff;
+}
+
+.fixed-table-thirdcol {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.fixed-table-thirdcol thead {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 3;
+}
+.fixed-table-thirdcol th:nth-child(2),
+.fixed-table-thirdcol td:nth-child(2){
+    position: sticky;
+    left: 0;
+    z-index: 1;
+}
+.fixed-table-thirdcol th:nth-child(3), .fixed-table-thirdcol td:nth-child(3){
+    position: sticky;
+    left: 92px;
+    z-index: 1;
+}
+.fixed-table-thirdcol thead th:nth-child(2),
+.fixed-table-thirdcol th:nth-child(3) {
+    background-color: #fff;
+}
+.fixed-table-thirdcol thead td:nth-child(2),
+.fixed-table-thirdcol td:nth-child(3){
+    background-color: #fff;
+}
+.fixed-table-thirdcol tbody tr:nth-child(odd) td:nth-child(2),
+.fixed-table-thirdcol tbody tr:nth-child(odd) td:nth-child(3){
+    background-color: #f9f9f9;
+}
+.fixed-table-thirdcol tbody tr:nth-child(even) td:nth-child(2),
+.fixed-table-thirdcol tbody tr:nth-child(even) td:nth-child(3){
+    background-color: #ffffff;
+}
+.fixed-table-thirdcol tbody tr {
+    height: 30px;
+}
+.fixed-table-thirdcol tbody tr td{
+    padding-top: 2px;
+    padding-bottom: 0;
+}
+
+.fixed-table-stats {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.fixed-table-stats thead {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 3;
+}
+.fixed-table-stats th:nth-child(2),
+.fixed-table-stats td:nth-child(2){
+    position: sticky;
+    left: 0;
+    z-index: 1;
+}
+.fixed-table-stats th:nth-child(3), .fixed-table-stats td:nth-child(3){
+    position: sticky;
+    left: 92px;
+    z-index: 1;
+}
+.fixed-table-stats thead th:nth-child(2),
+.fixed-table-stats th:nth-child(3) {
+    background-color: #fff;
+}
+.fixed-table-stats thead td:nth-child(2),
+.fixed-table-stats td:nth-child(3){
+    background-color: #fff;
+}
+.fixed-table-stats tbody tr:nth-child(odd) td:nth-child(2),
+.fixed-table-stats tbody tr:nth-child(odd) td:nth-child(3){
+    background-color: #f9f9f9;
+}
+.fixed-table-stats tbody tr:nth-child(even) td:nth-child(2),
+.fixed-table-stats tbody tr:nth-child(even) td:nth-child(3){
+    background-color: #ffffff;
+}
+.fixed-table-stats tbody tr {
+    height: 30px;
+}
+.fixed-table-stats tbody tr td{
+    padding-top: 2px;
+    padding-bottom: 0;
+}
+
+.index-color-green {
+    background-color: rgba(4, 243, 7, 0.25);
+}
+.index-color-yellow {
+    background-color: rgba(255, 196, 0, 0.25);
+}
+.index-color-red {
+    background-color: rgba(255, 0, 0, 0.25);
+}
+
+.outlier {
+    font-weight: bold;
+}

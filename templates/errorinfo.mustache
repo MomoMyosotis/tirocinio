@@ -1,0 +1,49 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_coripodatacollection/projectinfo
+
+    Default template for the page in which will be displayed the information about the project
+
+}}
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_coripodatacollection/errordisplay
+
+    Default template for the page in which will be displayed the information about the project
+
+}}
+<div {{#id-value}}id="{{id-value}}"{{/id-value}} name="errorMessage" style="display: {{#displayClass}}{{displayClass}}{{/displayClass}}{{^displayClass}}block{{/displayClass}}" class="alert alert-danger alert-block fade in  alert-dismissible" role="alert" data-aria-autofocus="true">
+    <strong>{{title-error}} </strong>
+    {{message-error}}
+    {{#redirect-link}}
+        <div class="continuebutton">
+            <form method="get" action="{{redirect-link}}">
+                <button type="submit" class="btn btn-primary" id="single_button6610336a9a9a35">{{redirect-link-text}}</button>
+            </form>
+        </div>
+    {{/redirect-link}}
+</div>

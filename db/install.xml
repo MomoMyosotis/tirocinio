@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/coripodatacollection/db" VERSION="20250523" COMMENT="XMLDB file for Moodle mod_coripodatacollection"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="coripodatacollection" COMMENT="Stores the coripodatacollection activity module instances.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ID of the course this activity is part of."/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the activity module instance"/>
+        <FIELD NAME="academicyear" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was added to the course."/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp of when the instance was last modified."/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Activity description."/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The format of the intro field."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_projects" COMMENT="Tabella per la memorizzazione dei progetti creati all'interno della piattaforma di raccolta dati.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="projectname" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="creationdate" TYPE="int" LENGTH="15" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="corporation" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_erogations" COMMENT="Tabella per la memorizzazione delle erogazioni avviate dai vari amministratori di progetti">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="projectid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="academicyearedition" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="startingyear" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="start_censimento" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="end_censimento" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="start_val_pre" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="end_val_pre" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="start_val_post" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="end_val_post" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="calcolo_globale_pre" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="calcolo_globale_post" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="outlier_pre" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="outlier_post" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="evaluation_completed_pre" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="evaluation_completed_post" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="projectid_foreign" TYPE="foreign" FIELDS="projectid" REFTABLE="mdl_coripodatacollection_projects" REFFIELDS="id"/>
+        <KEY NAME="courseid_foreign" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_istituti" COMMENT="Tabella per la memorizzazione degli istituti censiti all'interno della piattaforma per la raccolta dati.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="denominazioneistituto" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="numerodiplessi" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scuolasingola" TYPE="binary" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="nome_direttore" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="cognome_direttore" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="email_direttore" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="nome_dsga" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="cognome_dsga" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="email_dsga" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="zona" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_plessi" COMMENT="Tabella per la memorizzazione dei plessi censiti per ogni istituto all'interno della piattaforma di raccolta dati.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="instituteid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="denominazioneplesso" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="indirizzo" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="instituteid" TYPE="foreign" FIELDS="instituteid" REFTABLE="coripodatacollection_istituti" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_classes" COMMENT="Tabella per la memorizzazione delle classi censite per ogni istituto e plesso all'interno della piattaforma di raccolta dati.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="erogazione" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="istituto" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="plesso" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="anno" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="classe" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="numerostudenti" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="pluriclasse" TYPE="binary" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="confermato" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="conferma da insegnante se il numero degli studenti è corretto"/>
+        <FIELD NAME="statistichepre" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="Indica se sono state calcolate o meno delle nuove statistiche su risultati pre rinforzo"/>
+        <FIELD NAME="risultatipre" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="Indica se sono stati aggiunti nuovi risultati dall'ultimo calcolo"/>
+        <FIELD NAME="completati_res_pre" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="valutazione_classe_pre" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="valutazione_globale_pre" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="statistichepost" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="Indica se sono state calcolate o meno delle nuove statistiche su risultati post rinforzo"/>
+        <FIELD NAME="risultatipost" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="Indica se sono stati aggiunti nuovi risultati dall'ultimo calcolo"/>
+        <FIELD NAME="completati_res_post" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="valutazione_classe_post" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="valutazione_globale_post" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="can_edit_censimento" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="can_edit_val_pre" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="can_edit_val_post" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="outlier_pre" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="outlier_post" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="metodo_didattico" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="istituteid" TYPE="foreign" FIELDS="istituto" REFTABLE="mdl_coripodatacollection_istituti" REFFIELDS="id"/>
+        <KEY NAME="plessoid" TYPE="foreign" FIELDS="plesso" REFTABLE="mdl_coripodatacollection_plessi" REFFIELDS="id"/>
+        <KEY NAME="erogazioneid" TYPE="foreign" FIELDS="erogazione" REFTABLE="coripodatacollection_erogations" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_alunni" COMMENT="Tabella per la memorizzazione degli alunni censiti per ogni classe all'interno della piattaforma di raccolta dati.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="cognome" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="nome" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="hash_code" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="carta_identita" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="natoinitalia" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="difficoltalinguaggio" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="linguaparlatacasa" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="frequenzascuolainfanzia" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="difficoltascuolainfanzia" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="notadifficolta" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="leggecentoquattro" TYPE="binary" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="problematicacentoquattro" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="email_genitore" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="telefono_genitore" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_risultati" COMMENT="Tabella per la memorizzazione dei risultati inseriti dalle insegnanti. L'identificazione univoca di ogni risultato è garantito dagli ID dell'alunno (che può avere più risultati inseriti) e della classe (che anno per anno viene quindi cambiata)">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="erogazione" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="classe" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="periodo" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="alunno" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="includi_calcolo" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="inserimento_parziale" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="metodo_didattico" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="difficolta_prerinforzo" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="proveaccessorie" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="metafonologia_fusione" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="metafonologia_analisi_cv" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="metafonologia_analisi_cvc" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="metafonologia_segment" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="metafonologia_segment_gruppo" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_modalita" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_fonemi_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_fonemi_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_sillabe_cv_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_sillabe_cv_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_sillabe_cvc_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_sillabe_cvc_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_nonparole_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_nonparole_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_piane_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_piane_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_parolecons_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_parolecons_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_sillabe_cv_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_sillabe_cvc_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_nonparole_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_piane_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_parolecons_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_paroleort_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_letturan_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_letturan_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_enumavanti_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_enumavanti_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_enumindietro_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_enumindietro_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_ricquantita_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_ricquantita_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_addizioni_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_addizioni_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_sottrazioni_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_sottrazioni_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_confronto_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_orddalpiupiccolo_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_orddalpiugrande_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_dettaton_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_trasforma_cifre_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="alunnoid" TYPE="foreign" FIELDS="alunno" REFTABLE="coripodatacollection_alunni" REFFIELDS="id"/>
+        <KEY NAME="classeid" TYPE="foreign" FIELDS="classe" REFTABLE="mdl_coripodatacollection_classes" REFFIELDS="id"/>
+        <KEY NAME="erogationid" TYPE="foreign" FIELDS="erogazione" REFTABLE="mdl_coripodatacollection_erogations" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_medie_risultati" COMMENT="Tabella per la memorizzazione delle medie dei risultati di una classe">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="erogazione" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="classe" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="periodo" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_fonemi_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_fonemi_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_sillabe_cv_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_sillabe_cv_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_sillabe_cvc_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_sillabe_cvc_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_nonparole_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_nonparole_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_piane_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_piane_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_parolecons_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_parolecons_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_sillabe_cv_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_sillabe_cvc_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_nonparole_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_piane_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_parolecons_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_paroleort_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_letturan_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_letturan_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_enumavanti_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_enumavanti_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_enumindietro_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_enumindietro_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_ricquantita_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_ricquantita_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_addizioni_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_addizioni_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_sottrazioni_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_sottrazioni_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_confronto_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_orddalpiupiccolo_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_orddalpiugrande_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_dettaton_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_trasforma_cifre_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="classeid" TYPE="foreign" FIELDS="classe" REFTABLE="mdl_coripodatacollection_classes" REFFIELDS="id"/>
+        <KEY NAME="erogationid" TYPE="foreign" FIELDS="erogazione" REFTABLE="mdl_coripodatacollection_erogations" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_stddev_risultati" COMMENT="Tabella per la memorizzazione delle deviazioni standard dei risultati di una classe">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="erogazione" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="classe" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="periodo" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_fonemi_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_fonemi_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_sillabe_cv_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_sillabe_cv_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_sillabe_cvc_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_sillabe_cvc_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_nonparole_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_nonparole_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_piane_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_piane_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_parolecons_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="lettura_parolecons_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_sillabe_cv_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_sillabe_cvc_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_nonparole_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_piane_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_parolecons_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="scrittura_paroleort_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_letturan_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_letturan_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_enumavanti_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_enumavanti_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_enumindietro_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_enumindietro_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_ricquantita_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_ricquantita_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_addizioni_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_addizioni_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_sottrazioni_tempo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="matematica_sottrazioni_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_confronto_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_orddalpiupiccolo_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_orddalpiugrande_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_dettaton_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="matematica_trasforma_cifre_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="classeid" TYPE="foreign" FIELDS="classe" REFTABLE="mdl_coripodatacollection_classes" REFFIELDS="id"/>
+        <KEY NAME="erogationid" TYPE="foreign" FIELDS="erogazione" REFTABLE="mdl_coripodatacollection_erogations" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_indici_valutazione" COMMENT="Tabella per salvare gli indici di valutazione calcolati sulla base dei risultati raccolti, necessari poi per calcolare la corrispettiva media, deviazione standard e posizionamento dell'alunno all'interno della popolazione">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="erogazione" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="classe" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="periodo" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="alunno" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="risultato_originale" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="valutazione_globale" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="valutazione_classe" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="nota_specialistica" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_correttezza" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_rapidita" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_sublessicale" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_lessicale" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_media" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="scrittura_correttezza" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_lettura" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_enumerazione" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_decodifica" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_calcolo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="alunnoid" TYPE="foreign" FIELDS="alunno" REFTABLE="coripodatacollection_alunni" REFFIELDS="id"/>
+        <KEY NAME="classeid" TYPE="foreign" FIELDS="classe" REFTABLE="mdl_coripodatacollection_classes" REFFIELDS="id"/>
+        <KEY NAME="erogationid" TYPE="foreign" FIELDS="erogazione" REFTABLE="mdl_coripodatacollection_erogations" REFFIELDS="id"/>
+        <KEY NAME="resultid" TYPE="foreign" FIELDS="risultato_originale" REFTABLE="mdl_coripodatacollection_risultati" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_medie_indici" COMMENT="Tabella contenente le medie per ogni indice per le varie classi.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="erogazione" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="classe" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="periodo" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_correttezza" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_rapidita" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_sublessicale" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_lessicale" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_media" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="scrittura_correttezza" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_lettura" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_enumerazione" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_decodifica" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_calcolo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="classeid" TYPE="foreign" FIELDS="classe" REFTABLE="mdl_coripodatacollection_classes" REFFIELDS="id"/>
+        <KEY NAME="erogationid" TYPE="foreign" FIELDS="erogazione" REFTABLE="mdl_coripodatacollection_erogations" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_stddev_indici" COMMENT="Tabella contenente le deviazioni standard per ogni classe per ogni indice.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="erogazione" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="classe" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="periodo" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_correttezza" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_rapidita" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_sublessicale" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_lessicale" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_media" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="scrittura_correttezza" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_lettura" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_enumerazione" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_decodifica" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_calcolo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="classeid" TYPE="foreign" FIELDS="classe" REFTABLE="mdl_coripodatacollection_classes" REFFIELDS="id"/>
+        <KEY NAME="erogationid" TYPE="foreign" FIELDS="erogazione" REFTABLE="mdl_coripodatacollection_erogations" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_medie_globali" COMMENT="Tabella che memorizza le medie sugli indici globalmente">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="erogazione" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="periodo" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_correttezza" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_rapidita" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_sublessicale" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_lessicale" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_media" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="scrittura_correttezza" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_lettura" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_enumerazione" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_decodifica" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_calcolo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="erogationid" TYPE="foreign" FIELDS="erogazione" REFTABLE="mdl_coripodatacollection_erogations" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_stddev_globali" COMMENT="Tabella che memorizza le medie sugli indici globalmente">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="erogazione" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="periodo" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="lettura_correttezza" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_rapidita" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_sublessicale" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_lessicale" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="lettura_media" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="scrittura_correttezza" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_lettura" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_enumerazione" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_decodifica" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+        <FIELD NAME="matematica_correttezza_calcolo" TYPE="number" LENGTH="10" NOTNULL="false" SEQUENCE="false" DECIMALS="5"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="erogationid" TYPE="foreign" FIELDS="erogazione" REFTABLE="mdl_coripodatacollection_erogations" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_projectadmin" COMMENT="Tabella per la memorizzazione degli utenti censiti come amministratori di un progetto aperto all'interno della piattaforma per la raccolta dati.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="projectid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="mdl_user" REFFIELDS="id"/>
+        <KEY NAME="projectid" TYPE="foreign" FIELDS="projectid" REFTABLE="mdl_coripodatacollection_projects" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_evaluators" COMMENT="Tabella per memorizzare, per ogni progetto, gli utenti della piattaforma che sono censiti come utenti valutatori.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="projectid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="mdl_user" REFFIELDS="id"/>
+        <KEY NAME="projectid" TYPE="foreign" FIELDS="projectid" REFTABLE="mdl_coripodatacollection_projects" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_instituteadmin" COMMENT="Tabella per la memorizzazione degli utenti censiti come amministratori dei vari istituti presenti nella piattaforma di raccolta dati.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="instituteid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="mdl_user" REFFIELDS="id"/>
+        <KEY NAME="instituteid" TYPE="foreign" FIELDS="instituteid" REFTABLE="mdl_coripodatacollection_istituti" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_teachers" COMMENT="Tabella per la memorizzazione degli utenti censiti come insegnanti di un istituto della piattaforma di raccolta dati.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="instituteid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="instituteid" TYPE="foreign" FIELDS="instituteid" REFTABLE="mdl_coripodatacollection_istituti" REFFIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="mdl_user" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_classadmin" COMMENT="Tabella per la memorizzazione degli utenti censiti come insegnanti di amministrazione delle classi della piattaforma di raccolta dati.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="classid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="mdl_user" REFFIELDS="id"/>
+        <KEY NAME="classid" TYPE="foreign" FIELDS="classid" REFTABLE="mdl_coripodatacollection_classes" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_class_students" COMMENT="Tabella per la memorizzazione degli alunni censiti per ogni classe della piattaforma di raccolta dati.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="classid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="studentid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="numeroregistro" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="annofrequentazione" TYPE="int" LENGTH="2" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="carta_identita" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="consenso" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="codice_consenso" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="consenso_recupero" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="classid" TYPE="foreign" FIELDS="classid" REFTABLE="mdl_coripodatacollection_classes" REFFIELDS="id"/>
+        <KEY NAME="studentid" TYPE="foreign" FIELDS="studentid" REFTABLE="mdl_coripodatacollection_alunni" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_istituti_x_progetto" COMMENT="Tabella per memorizzare per ogni istituto i progetti a cui ha aderito all'interno della piattaforma di raccolta dati.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="projectid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="instituteid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="projectid" TYPE="foreign" FIELDS="projectid" REFTABLE="mdl_coripodatacollection_projects" REFFIELDS="id"/>
+        <KEY NAME="instituteid" TYPE="foreign" FIELDS="instituteid" REFTABLE="mdl_coripodatacollection_istituti" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_istituti_x_progetto_x_aa" COMMENT="Tabella che memorizza per ogni erogazione di un progetto, i corrispondenti istituti.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="instituteid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="projectid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="erogation" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="instituteid_foreign" TYPE="foreign" FIELDS="instituteid" REFTABLE="mdl_coripodatacollection_istituti" REFFIELDS="id"/>
+        <KEY NAME="projectid_foreign" TYPE="foreign" FIELDS="projectid" REFTABLE="mdl_coripodatacollection_projects" REFFIELDS="id"/>
+        <KEY NAME="erogation_foreign" TYPE="foreign" FIELDS="erogation" REFTABLE="coripodatacollection_erogations" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_classhistory" COMMENT="Tabella che memorizza lo storico di ogni classe, memorizzando per ognuna di esse, le eventuali classi da cui deriva, per esempio: 3A deriva da 2A e 1A; utile per memorizzare eventuali classi che sono il risultato dell'unione di più classi">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="classid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="parent_classid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="parent_deleted" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="classid" TYPE="foreign" FIELDS="classid" REFTABLE="mdl_coripodatacollection_classes" REFFIELDS="id"/>
+        <KEY NAME="parent_classid" TYPE="foreign" FIELDS="parent_classid" REFTABLE="mdl_coripodatacollection_classes" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_institutedsga" COMMENT="Contiene l'elenco degli utenti censiti che ricoprono il ruolo di utenti DSGA">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="instituteid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_principals" COMMENT="Tabella per salvare gli utenti che sono direttori degli istituti">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="instituteid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="mdl_user" REFFIELDS="id"/>
+        <KEY NAME="instituteid" TYPE="foreign" FIELDS="instituteid" REFTABLE="mdl_coripodatacollection_istituti" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_gruppi" COMMENT="Tabella che memorizza la via e la zona di dove vengono effettuati i rinforzi per i bambini di cui è stata diagnosticata la necessità di un recupero">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="erogationid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="codice" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="sede" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="dettaglio_sede" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="indirizzo" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="zona" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="aula" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="giorno1" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="orario1" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="giorno2" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="orario2" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="cognome_logopedista" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="nome_logopedista" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="nota" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="completato" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="chiuso" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="definitivo" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="erogationid" TYPE="foreign" FIELDS="erogationid" REFTABLE="mdl_coripodatacollection_erogations" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="coripodatacollection_alunni_gruppo" COMMENT="Tabella per salvare i bambini aggiunti per ogni gruppo">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="erogationid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="groupid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="studentid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="erogationid" TYPE="foreign" FIELDS="erogationid" REFTABLE="mdl_coripodatacollection_erogations" REFFIELDS="id"/>
+        <KEY NAME="groupid" TYPE="foreign" FIELDS="groupid" REFTABLE="coripodatacollection_gruppi" REFFIELDS="id"/>
+        <KEY NAME="studentid" TYPE="foreign" FIELDS="studentid" REFTABLE="mdl_coripodatacollection_alunni" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
