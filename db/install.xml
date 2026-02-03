@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/coripodatacollection/db" VERSION="20250523" COMMENT="XMLDB file for Moodle mod_coripodatacollection"
+<XMLDB PATH="mod/coripodatacollection/db" VERSION="20260205" COMMENT="XMLDB file for Moodle mod_coripodatacollection"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -197,6 +197,7 @@
         <FIELD NAME="matematica_orddalpiugrande_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="matematica_dettaton_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="matematica_trasforma_cifre_errori" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="nai" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Periodo (in anni) passato all'estero da bambino. può essere 0, 1 oppure, 2."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

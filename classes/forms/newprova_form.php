@@ -72,7 +72,7 @@ class newprova_form extends \moodleform {
 
         $table->id = 'result_table';
         $table->head = [
-                '', '', '',
+                '', '', '', '',
                 get_string('reading', 'mod_coripodatacollection'),
                 get_string('writing', 'mod_coripodatacollection'),
                 get_string('math', 'mod_coripodatacollection'),
@@ -89,16 +89,15 @@ class newprova_form extends \moodleform {
         }
 
         $table->align = ['center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;',
-                'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;',
-                'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;',
-                'center; border: 1px solid lightgrey;'];
-        $table->headspan = [1, 1, 1, 10, 4, 16, 6];
+                'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;',
+                'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;'];
+        $table->headspan = [1, 1, 1, 1, 10, 4, 16, 6];
         $table->colclasses = ['gradecell grade i4 overridden grade_type_value cell c2'];
         $htmlstringtable .= substr( $head = html_writer::table($table), 0, strpos($head, '</thead>'));
 
         $table = new \html_table();
         $table->head = [
-                '', '', '',
+                '', '', '', '',
                 get_string('phonemes', 'mod_coripodatacollection'),
                 get_string('syllables_cv', 'mod_coripodatacollection'),
                 get_string('syllables_cvc', 'mod_coripodatacollection'),
@@ -126,7 +125,7 @@ class newprova_form extends \moodleform {
                 get_string('consonant_groups_segmentation', 'mod_coripodatacollection'),
         ];
         $table->headspan = [
-                1, 1, 1,
+                1, 1, 1, 1,
                 2, 2, 2, 2, 2,
                 1, 1, 1, 1,
                 2, 2, 2, 2, 2, 2,
@@ -146,7 +145,7 @@ class newprova_form extends \moodleform {
         ];
 
         foreach ($table->headspan as $i => $val) {
-            if ($i<3) {
+            if ($i<4) {
                 continue;
             } elseif ($i == 22) {
                 $data[] = get_string('test_administration', 'mod_coripodatacollection');
@@ -188,38 +187,67 @@ class newprova_form extends \moodleform {
                 }
             }
 
+            // Build row with a fixed initial column order to ensure alignment
             $row = [];
+            $row[] = $arrayvalutazione['numeroregistro'] ?? '';
+            $row[] = $arrayvalutazione['cn'] ?? '';
+
+            // NAI column
+            $naival = $arrayvalutazione['nai'] ?? null;
+            if ($editmode) {
+                $naielement = 'nai[' . $idvalutazione . ']';
+                $naioptions = [
+                        'type' => 'number',
+                        'name' => $naielement,
+                        'value' => ($naival === null || $naival === "") ? 0 : intval($naival),
+                        'class' => 'form-control statusicons validate-input',
+                        'min' => 0,
+                        'max' => 2,
+                        'step' => 1,
+                        'style' => 'width: 70px; margin: 0 auto; display: block; text-align: right;'
+                ];
+                $row[] = html_writer::empty_tag('input', $naioptions);
+            } else {
+                $row[] = ($naival === null || $naival === "") ? 0 : intval($naival);
+            }
+
+            // Inserimento parziale column
+            $partialval = $arrayvalutazione['inserimento_parziale'] ?? null;
+            if ($editmode) {
+                $partialelement = 'inserimento_parziale[' . $idvalutazione . ']';
+                $selections = [1 => get_string('yes', 'mod_coripodatacollection'), 0 => get_string('no', 'mod_coripodatacollection')];
+                $options = ['class' => 'form-control statusicons', 'style' => 'width: 70px; margin: 0 auto; display: block; text-align: center;'];
+                $selected = ($partialval === null || $partialval === "") ? 0 : intval($partialval);
+                $row[] = html_writer::select($selections, $partialelement, $selected, [], $options);
+            } else {
+                $row[] = ($partialval === null || $partialval === "") ? '' : $partialval;
+            }
+
             foreach ($arrayvalutazione as $key => $val) {
-                if ($key == 'id' || $key == 'classe' || $key == 'alunno' || $key == 'periodo' || $key == 'erogazione'
-                        || $key == 'difficolta_prerinforzo' || $key == 'lettura_parolecons_tempo' || $key == 'lettura_parolecons_errori'
-                        || $key == 'scrittura_parolecons_errori' || $key == 'scrittura_paroleort_errori' || $key == 'metodo_didattico'
-                        || $key == 'lettura_modalita' || $key == 'includi_calcolo' || $key == 'matematica_trasforma_cifre_errori') {
-                    continue;
-                } elseif ($key == 'numeroregistro' || $key == 'cn') {
-                    $row[] = $val;
+                if (in_array($key, ['id', 'classe', 'alunno', 'periodo', 'erogazione', 'difficolta_prerinforzo', 'lettura_parolecons_tempo', 'lettura_parolecons_errori', 'scrittura_parolecons_errori', 'scrittura_paroleort_errori', 'metodo_didattico', 'lettura_modalita', 'includi_calcolo', 'matematica_trasforma_cifre_errori', 'numeroregistro', 'cn', 'nai', 'inserimento_parziale'])) {
                     continue;
                 }
 
                 if ($editmode) {
                     $nomeelemento = $key . '[' . $idvalutazione . ']';
                     if ($key == 'proveaccessorie' || $key == 'inserimento_parziale') {
+                        // Use numeric option values for boolean-like fields (0 = No, 1 = Yes).
                         $selections = [
-                                'Sì' => get_string('yes', 'mod_coripodatacollection'),
-                                'No' => get_string('no', 'mod_coripodatacollection')
+                                1 => get_string('yes', 'mod_coripodatacollection'),
+                                0 => get_string('no', 'mod_coripodatacollection')
                         ];
                         $options = [
-                                'type' => 'number',
                                 'class' => 'form-control statusicons',
                                 'style' => 'width: 70px; margin: 0 auto; display: block; text-align: center;'
                         ];
-                        $cellatabella = html_writer::select($selections, $nomeelemento,empty($val) ? 'No' : $val,
-                                [], $options);
+                        $selected = ($val === null || $val === "") ? 0 : intval($val);
+                        $cellatabella = html_writer::select($selections, $nomeelemento, $selected, [], $options);
                     } else {
                         $minvalue = 0;
                         $maxvalue = null;
 
                         if (str_ends_with($key, 'tempo')) {
-                            $minvalue = 5;
+                            $minvalue = 3;
                         } elseif (str_ends_with($key, 'errori')) {
 
                             if (str_contains($key, 'fonemi')) {
@@ -247,13 +275,25 @@ class newprova_form extends \moodleform {
                             }
                         }
 
+                        // Special handling for NAI: integer in {0,1,2}, default 0.
+                        if (strtolower($key) === 'nai' || strtolower($key) === 'NAI') {
+                            $minvalue = 0;
+                            $maxvalue = 2;
+                            // If stored value is empty, default to 0 for display.
+                            $displayvalue = ($val === null || $val === "") ? 0 : intval($val);
+                            $step = 1;
+                        } else {
+                            $displayvalue = $val;
+                            $step = str_ends_with($key, 'tempo') ? '0.1' : '0';
+                        }
+
                         $options = [
                                 'type' => 'number',
                                 'name' => $nomeelemento,
-                                'value' => $val,
+                                'value' => $displayvalue,
                                 'class' => 'form-control statusicons validate-input',
                                 'min' => $minvalue,
-                                'step' => str_ends_with($key, 'tempo') ? '0.1' : '0',
+                                'step' => $step,
                                 'data-field-name' => $key,
                                 'data-min-value' => $minvalue,
                                 'style' => 'width: 70px; margin: 0 auto; display: block; text-align: right;'
@@ -434,38 +474,57 @@ class newprova_form extends \moodleform {
             $arrayvalutazione = swapAssociativeKeys($arrayvalutazione, 'scrittura_piane_errori', 'scrittura_nonparole_errori');
 
             $row = [];
+            // Fixed order: register number, student name, partial insertion, preceding observation difficulties
+            $row[] = $arrayvalutazione['numeroregistro'] ?? '';
+            $row[] = $arrayvalutazione['cn'] ?? '';
+            // partial_result / inserimento_parziale
+            $partialval = $arrayvalutazione['inserimento_parziale'] ?? ($arrayvalutazione['partial_result'] ?? null);
+            if ($editmode) {
+                $partialelement = 'inserimento_parziale[' . $idvalutazione . ']';
+                $selections = [1 => get_string('yes', 'mod_coripodatacollection'), 0 => get_string('no', 'mod_coripodatacollection')];
+                $options = ['class' => 'form-control statusicons', 'style' => 'width: 70px; margin: 0 auto; display: block; text-align: center;'];
+                $selected = ($partialval === null || $partialval === "") ? 0 : intval($partialval);
+                $row[] = html_writer::select($selections, $partialelement, $selected, [], $options);
+            } else {
+                $row[] = ($partialval === null || $partialval === "") ? '' : $partialval;
+            }
+            // preceding observation difficulties (difficolta_prerinforzo)
+            $difficoltaval = $arrayvalutazione['difficolta_prerinforzo'] ?? null;
+            if ($editmode) {
+                $difficoltelement = 'difficolta_prerinforzo[' . $idvalutazione . ']';
+                $selections = [1 => get_string('yes', 'mod_coripodatacollection'), 0 => get_string('no', 'mod_coripodatacollection')];
+                $options = ['class' => 'form-control statusicons', 'style' => 'width: 70px; margin: 0 auto; display: block; text-align: center;'];
+                $selected = ($difficoltaval === null || $difficoltaval === "") ? 0 : intval($difficoltaval);
+                $row[] = html_writer::select($selections, $difficoltelement, $selected, [], $options);
+            } else {
+                $row[] = ($difficoltaval === null || $difficoltaval === "") ? '' : $difficoltaval;
+            }
+
             foreach ($arrayvalutazione as $key => $val) {
-                if ($key == 'id' || $key == 'classe' || $key == 'alunno' || $key == 'periodo' || $key == 'erogazione'
-                        || $key == 'lettura_fonemi_tempo' || $key == 'lettura_fonemi_errori' || $key == 'metodo_didattico'
-                        || $key == 'matematica_ricquantita_tempo' || $key == 'matematica_ricquantita_errori'
-                        || $key == 'includi_calcolo' || $key == 'lettura_modalita'
-                        ) {
-                    continue;
-                } elseif ($key == 'numeroregistro' || $key == 'cn') {
-                    $row[] = $val;
+                if (in_array($key, ['id', 'classe', 'alunno', 'periodo', 'erogazione', 'lettura_fonemi_tempo', 'lettura_fonemi_errori', 'metodo_didattico', 'matematica_ricquantita_tempo', 'matematica_ricquantita_errori', 'includi_calcolo', 'lettura_modalita', 'numeroregistro', 'cn', 'inserimento_parziale', 'partial_result', 'difficolta_prerinforzo'])) {
                     continue;
                 }
 
                 if ($editmode) {
                     $nomeelemento = $key . '[' . $idvalutazione . ']';
                     if ($key == 'difficolta_prerinforzo' || $key == 'proveaccessorie' || $key == 'partial_result' || $key == 'inserimento_parziale') {
+                        // Use numeric option values (1 = Yes, 0 = No)
                         $selections = [
-                                'Sì' => get_string('yes', 'mod_coripodatacollection'),
-                                'No' => get_string('no', 'mod_coripodatacollection')
+                                1 => get_string('yes', 'mod_coripodatacollection'),
+                                0 => get_string('no', 'mod_coripodatacollection')
                         ];
                         $options = [
-                                'type' => 'number',
                                 'class' => 'form-control statusicons',
                                 'style' => 'width: 70px; margin: 0 auto; display: block; text-align: center;'
                         ];
-                        $cellatabella = html_writer::select($selections, $nomeelemento,empty($val) ? 'No' : $val,
-                                [], $options);
+                        $selected = ($val === null || $val === "") ? 0 : intval($val);
+                        $cellatabella = html_writer::select($selections, $nomeelemento,$selected, [], $options);
                     } else {
                         $minvalue = 0;
                         $maxvalue = null;
 
                         if (str_ends_with($key, 'tempo')) {
-                            $minvalue = 5;
+                            $minvalue = 3;
                         } elseif (str_ends_with($key, 'errori')) {
                             if (str_contains($key, 'fonemi')) {
                                 $maxvalue = 20;
@@ -576,18 +635,40 @@ class newprova_form extends \moodleform {
                     $nuovorisultato['id'] = $id;
                     foreach ($data as $field => $listanuovirisultati) {
                         if (!empty($listanuovirisultati[$id])) {
-                            if ($field == 'proveaccessorie' || $field == 'difficolta_prerinforzo' || $field == 'lettura_modalita'
-                                    || $field == 'inserimento_parziale' || $field == 'metodo_didattico') {
+                            // Boolean-like fields: store as integer 0 or 1.
+                            if (in_array($field, ['proveaccessorie', 'inserimento_parziale', 'difficolta_prerinforzo', 'partial_result'])) {
+                                $valint = intval($listanuovirisultati[$id]);
+                                $nuovorisultato[$field] = ($valint === 1) ? 1 : 0;
+                            // Textual fields: keep as string.
+                            } elseif ($field == 'lettura_modalita' || $field == 'metodo_didattico') {
                                 $nuovorisultato[$field] = strval($listanuovirisultati[$id]);
+                            // Numeric fields: floats.
                             } else {
                                 $nuovorisultato[$field] = floatval($listanuovirisultati[$id]);
                             }
                         }
 
                         if (isset($listanuovirisultati[$id]) && $listanuovirisultati[$id] == 0) {
-                            $nuovorisultato[$field] = floatval($listanuovirisultati[$id]);
+                            // If a value of 0 was submitted, ensure numeric/boolean-like fields get 0 and textual fields keep string form.
+                            if (in_array($field, ['proveaccessorie', 'inserimento_parziale', 'difficolta_prerinforzo', 'partial_result'])) {
+                                $nuovorisultato[$field] = 0;
+                            } elseif ($field == 'lettura_modalita' || $field == 'metodo_didattico') {
+                                $nuovorisultato[$field] = strval($listanuovirisultati[$id]);
+                            } else {
+                                $nuovorisultato[$field] = floatval($listanuovirisultati[$id]);
+                            }
                         }
                     }
+                    // Ensure NAI is always present and constrained to 0,1,2 (integer).
+                    if (!isset($nuovorisultato['nai'])) {
+                        $nuovorisultato['nai'] = 0;
+                    } else {
+                        $naiint = intval($nuovorisultato['nai']);
+                        if ($naiint < 0) $naiint = 0;
+                        if ($naiint > 2) $naiint = 2;
+                        $nuovorisultato['nai'] = $naiint;
+                    }
+
                     $arraynuovirisultati[] = (object)$nuovorisultato;
                 }
                 return $arraynuovirisultati;

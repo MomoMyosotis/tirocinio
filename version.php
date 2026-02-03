@@ -26,6 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_coripodatacollection';
 $plugin->release = '0.1.0';
-$plugin->version = 2026012402;
+$plugin->version = 2026020305;
 $plugin->requires = 2022112800;
 $plugin->maturity = MATURITY_ALPHA;

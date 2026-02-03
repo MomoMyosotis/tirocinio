@@ -43,7 +43,7 @@ function xmldb_coripodatacollection_upgrade($oldversion) {
     // You will also have to create the db/install.xml file by using the XMLDB Editor.
     // Documentation for the XMLDB Editor can be found at {@link https://docs.moodle.org/dev/XMLDB_editor}.
 
-    if ($oldversion < 2026011901) {
+    if ($oldversion < 2026020305) {
 
         $xmlFile = '../mod/coripodatacollection/db/install.xml'; // Percorso al file XML
         if (!file_exists($xmlFile)) {

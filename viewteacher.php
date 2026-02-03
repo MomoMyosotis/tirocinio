@@ -404,8 +404,8 @@ if ($page == 'primevalutazioni') {
                 $d->periodo = 'prerinforzo';
                 $d->difficolta_prerinforzo = 'None';
                 $d->erogazione = $class->erogazione;
-                $d->proveaccessorie = empty($d->proveaccessorie) ? 'No' : $d->proveaccessorie;
-                $d->inserimento_parziale = empty($d->inserimento_parziale) ? 'No' : $d->inserimento_parziale;
+                $d->proveaccessorie = empty($d->proveaccessorie) ? 0 : intval($d->proveaccessorie);
+                $d->inserimento_parziale = empty($d->inserimento_parziale) ? 0 : intval($d->inserimento_parziale);
 
                 $is_all_null = true;
                 foreach ($d as $key => $value) {
@@ -419,7 +419,7 @@ if ($page == 'primevalutazioni') {
                     }
                 }
                 if ($is_all_null) {
-                    $d->inserimento_parziale = $d->inserimento_parziale == 'Sì' ? 'Sì' : null;
+                    $d->inserimento_parziale = ($d->inserimento_parziale == 1) ? 1 : null;
                     $d->proveaccessorie = null;
                     $d->lettura_modalita = null;
                 }
@@ -522,8 +522,8 @@ if ($page == 'ultimevalutazioni') {
             foreach ($data as $d) {
                 $d->periodo = 'postrinforzo';
                 $d->erogazione = $class->erogazione;
-                $d->difficolta_prerinforzo = empty($d->difficolta_prerinforzo) ? 'No' : $d->difficolta_prerinforzo;
-                $d->inserimento_parziale = empty($d->inserimento_parziale) ? 'No' : $d->inserimento_parziale;
+                $d->difficolta_prerinforzo = empty($d->difficolta_prerinforzo) ? 0 : intval($d->difficolta_prerinforzo);
+                $d->inserimento_parziale = empty($d->inserimento_parziale) ? 0 : intval($d->inserimento_parziale);
 
                 $is_all_null = true;
                 foreach ($d as $key => $value) {
@@ -538,7 +538,7 @@ if ($page == 'ultimevalutazioni') {
                 }
                 if ($is_all_null) {
                     $d->difficolta_prerinforzo = null;
-                    $d->inserimento_parziale = $d->inserimento_parziale == 'Sì' ? 'Sì' : null;
+                    $d->inserimento_parziale = $d->inserimento_parziale == 1 ? 1 : null;
                     $d->lettura_modalita = null;
                 }
 
