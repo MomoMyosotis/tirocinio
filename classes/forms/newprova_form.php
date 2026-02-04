@@ -88,7 +88,7 @@ class newprova_form extends \moodleform {
             }
         }
 
-        $table->align = ['center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;',
+        $table->align = ['center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;',
                 'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;',
                 'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;'];
         $table->headspan = [1, 1, 1, 1, 10, 4, 16, 6];
@@ -147,7 +147,7 @@ class newprova_form extends \moodleform {
         foreach ($table->headspan as $i => $val) {
             if ($i<4) {
                 continue;
-            } elseif ($i == 22) {
+            } elseif ($i == 23) {
                 $data[] = get_string('test_administration', 'mod_coripodatacollection');
             } elseif ($val == 1) {
                 $data[] = get_string('errors', 'mod_coripodatacollection');

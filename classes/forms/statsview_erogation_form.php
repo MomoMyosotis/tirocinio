@@ -195,7 +195,9 @@ class statsview_erogation_form extends \moodleform {
                     $medie->lettura_correttezza,
                     $stddev->lettura_correttezza,
                     result_missing_for_index('lettura_correttezza', $original_res),
-                    $outlier && is_outlier($ind_val->id, $array)
+                    $outlier && is_outlier($ind_val->id, $array),
+                    'lettura_correttezza',
+                    ($periodo == 'prerinforzo')
             );
 
             $array = [];
@@ -207,7 +209,9 @@ class statsview_erogation_form extends \moodleform {
                     $medie->lettura_rapidita,
                     $stddev->lettura_rapidita,
                     result_missing_for_index('lettura_rapidita', $original_res),
-                    $outlier && is_outlier($ind_val->id, $array)
+                    $outlier && is_outlier($ind_val->id, $array),
+                    'lettura_rapidita',
+                    ($periodo == 'prerinforzo')
             );
 
             $array = [];
@@ -219,7 +223,9 @@ class statsview_erogation_form extends \moodleform {
                     $medie->scrittura_correttezza,
                     $stddev->scrittura_correttezza,
                     result_missing_for_index('scrittura_correttezza', $original_res),
-                    $outlier && is_outlier($ind_val->id, $array)
+                    $outlier && is_outlier($ind_val->id, $array),
+                    'scrittura_correttezza',
+                    ($periodo == 'prerinforzo')
             );
 
             $array = [];
@@ -231,7 +237,9 @@ class statsview_erogation_form extends \moodleform {
                     $medie->matematica_correttezza_lettura,
                     $stddev->matematica_correttezza_lettura,
                     result_missing_for_index('matematica_correttezza_lettura', $original_res),
-                    $outlier && is_outlier($ind_val->id, $array)
+                    $outlier && is_outlier($ind_val->id, $array),
+                    'matematica_correttezza_lettura',
+                    ($periodo == 'prerinforzo')
             );
 
             $array = [];
@@ -243,7 +251,9 @@ class statsview_erogation_form extends \moodleform {
                     $medie->matematica_correttezza_enumerazione,
                     $stddev->matematica_correttezza_enumerazione,
                     result_missing_for_index('matematica_correttezza_enumerazione', $original_res),
-                    $outlier && is_outlier($ind_val->id, $array)
+                    $outlier && is_outlier($ind_val->id, $array),
+                    'matematica_correttezza_enumerazione',
+                    ($periodo == 'prerinforzo')
             );
 
             $array = [];
@@ -255,7 +265,9 @@ class statsview_erogation_form extends \moodleform {
                     $medie->matematica_correttezza_decodifica,
                     $stddev->matematica_correttezza_decodifica,
                     result_missing_for_index('matematica_correttezza_decodifica', $original_res),
-                    $outlier && is_outlier($ind_val->id, $array)
+                    $outlier && is_outlier($ind_val->id, $array),
+                    'matematica_correttezza_decodifica',
+                    ($periodo == 'prerinforzo')
             );
 
             $array = [];
@@ -267,7 +279,9 @@ class statsview_erogation_form extends \moodleform {
                     $medie->matematica_correttezza_calcolo,
                     $stddev->matematica_correttezza_calcolo,
                     result_missing_for_index('matematica_correttezza_calcolo', $original_res),
-                    $outlier && is_outlier($ind_val->id, $array)
+                    $outlier && is_outlier($ind_val->id, $array),
+                    'matematica_correttezza_calcolo',
+                    ($periodo == 'prerinforzo')
             );
 
             $array = [];
@@ -280,6 +294,8 @@ class statsview_erogation_form extends \moodleform {
                     $stddev->lettura_sublessicale,
                     result_missing_for_index('lettura_sublessicale', $original_res),
                     $outlier && is_outlier($ind_val->id, $array, false),
+                    'lettura_sublessicale',
+                    ($periodo == 'prerinforzo'),
                     true);
 
             $array = [];
@@ -292,6 +308,8 @@ class statsview_erogation_form extends \moodleform {
                     $stddev->lettura_lessicale,
                     result_missing_for_index('lettura_lessicale', $original_res),
                     $outlier && is_outlier($ind_val->id, $array, false),
+                    'lettura_lessicale',
+                    ($periodo == 'prerinforzo'),
                     true);
 
             $array = [];
@@ -304,6 +322,8 @@ class statsview_erogation_form extends \moodleform {
                     $stddev->lettura_media,
                     result_missing_for_index('lettura_media', $original_res),
                     $outlier && is_outlier($ind_val->id, $array, false),
+                    'lettura_media',
+                    ($periodo == 'prerinforzo'),
                     true);
 
             $table->data[] = new html_table_row($row);
@@ -431,7 +451,7 @@ class statsview_erogation_form extends \moodleform {
         }
     }
 
-    private function get_colored_cell($val, $media, $stddev, $is_partial_index, $outlier, $inverted = false) {
+    private function get_colored_cell($val, $media, $stddev, $is_partial_index, $outlier, $colname = '', $appendcomputed = false, $inverted = false) {
 
         if (is_null( $val )){
             $cell = new html_table_cell();
@@ -468,8 +488,46 @@ class statsview_erogation_form extends \moodleform {
         $cell = new html_table_cell();
         $cell->text = round($val, 2);
 
+        // Optionally compute percentage or z-score depending on column
+        $computed = null;
+        // Define which columns are percentages (error-based) and sensible maxes (adjust if needed)
+        $percent_max = [
+            'lettura_correttezza' => 137, // sum of maximum possible errors (manual estimation)
+            'scrittura_correttezza' => 107,
+            'matematica_correttezza_lettura' => 20,
+            'matematica_correttezza_enumerazione' => 20,
+            'matematica_correttezza_decodifica' => 40,
+            'matematica_correttezza_calcolo' => 20
+        ];
+
+        $time_based = [
+            'lettura_rapidita',
+            'lettura_sublessicale',
+            'lettura_lessicale',
+            'lettura_media'
+        ];
+
+        if (!empty($colname) && $appendcomputed) {
+            if (array_key_exists($colname, $percent_max)) {
+                $max = $percent_max[$colname];
+                if ($max > 0) {
+                    $computed = round(($val / $max) * 100, 1) . '%';
+                }
+            } else if (in_array($colname, $time_based)) {
+                if ($stddev != 0) {
+                    $z = ($val - $media) / $stddev;
+                    $computed = 'z=' . round($z, 2);
+                } else {
+                    $computed = 'z=N/A';
+                }
+            }
+        }
+
         if ($is_partial_index)
             $cell->text = '* ' . $cell->text;
+
+        if (!is_null($computed))
+            $cell->text .= ' | ' . $computed;
 
         $cell->attributes = ['class' => $color];
         return $cell;

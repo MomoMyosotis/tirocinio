@@ -424,6 +424,38 @@ if ($page == 'primevalutazioni') {
                     $d->lettura_modalita = null;
                 }
 
+                // Enforce maximum allowed values to prevent invalid/overflow inputs (server-side clamp).
+                $max_map = [
+                        'lettura_numeri' => 9,
+                        'reading_numbers' => 9,
+                        'numeri' => 9,
+                        'enumavanti' => 20,
+                        'enumindietro' => 20,
+                        'enumeration' => 20,
+                        'quantita' => 6,
+                        'addizioni' => 3,
+                        'sottrazioni' => 3,
+                        'confronto' => 6,
+                ];
+
+                foreach ($d as $key => $val) {
+                    if (is_numeric($val) && !is_null($val)) {
+                        // Do not allow negative values.
+                        if ($val < 0) {
+                            $d->$key = 0;
+                            continue;
+                        }
+                        foreach ($max_map as $substr => $maxv) {
+                            if (strpos($key, $substr) !== false) {
+                                if ($val > $maxv) {
+                                    $d->$key = $maxv;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 $DB->update_record('coripodatacollection_risultati', $d);
             }
             $DB->update_record('coripodatacollection_classes', $class);
@@ -540,6 +572,38 @@ if ($page == 'ultimevalutazioni') {
                     $d->difficolta_prerinforzo = null;
                     $d->inserimento_parziale = $d->inserimento_parziale == 1 ? 1 : null;
                     $d->lettura_modalita = null;
+                }
+
+                // Enforce maximum allowed values to prevent invalid/overflow inputs (server-side clamp).
+                $max_map = [
+                        'lettura_numeri' => 9,
+                        'reading_numbers' => 9,
+                        'numeri' => 9,
+                        'enumavanti' => 20,
+                        'enumindietro' => 20,
+                        'enumeration' => 20,
+                        'quantita' => 6,
+                        'addizioni' => 3,
+                        'sottrazioni' => 3,
+                        'confronto' => 6,
+                ];
+
+                foreach ($d as $key => $val) {
+                    if (is_numeric($val) && !is_null($val)) {
+                        // Do not allow negative values.
+                        if ($val < 0) {
+                            $d->$key = 0;
+                            continue;
+                        }
+                        foreach ($max_map as $substr => $maxv) {
+                            if (strpos($key, $substr) !== false) {
+                                if ($val > $maxv) {
+                                    $d->$key = $maxv;
+                                }
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 $DB->update_record('coripodatacollection_risultati', $d);

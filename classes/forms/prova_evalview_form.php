@@ -81,7 +81,7 @@ class prova_evalview_form extends \moodleform {
 
         $table->id = 'result_table_evaluator';
         $table->head = [
-                '', '', '', '', '',
+                '', '', '', '', '', '',
                 get_string('reading', 'mod_coripodatacollection'),
                 get_string('writing', 'mod_coripodatacollection'),
                 get_string('math', 'mod_coripodatacollection'),
@@ -101,7 +101,7 @@ class prova_evalview_form extends \moodleform {
                 'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;',
                 'center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;,
                 center; border: 1px solid lightgrey;', 'center; border: 1px solid lightgrey;'];
-        $table->headspan = [1, 1, 1, 1, 1, 10, 4, 16, 6];
+        $table->headspan = [1, 1, 1, 1, 1, 1, 10, 4, 16, 6];
         $table->colclasses = ['gradecell grade i4 overridden grade_type_value cell c2'];
         $htmlstringtable .= substr( $head = html_writer::table($table), 0, strpos($head, '</thead>'));
 
@@ -151,13 +151,14 @@ class prova_evalview_form extends \moodleform {
         $data = [
                 '',
                 get_string('student', 'mod_coripodatacollection'),
+                get_string('NAI', 'mod_coripodatacollection'),
                 get_string('includes', 'mod_coripodatacollection'),
                 get_string('partial_result', 'mod_coripodatacollection'),
                 get_string('didatic_method', 'mod_coripodatacollection')
         ];
 
         foreach ($table->headspan as $i => $val) {
-            if ($i<5) {
+            if ($i<6) {
                 continue;
             } elseif ($i == 24) {
                 $data[] = get_string('test_administration', 'mod_coripodatacollection');
@@ -196,42 +197,73 @@ class prova_evalview_form extends \moodleform {
                 }
             }
 
+            $editmode = false;
+            if (isset($this->_customdata['editmode'])) {
+                $editmode = $this->_customdata['editmode'];
+            }
+
+            // Fixed initial column order to ensure alignment
             $row = [];
+            $row[] = $arrayvalutazione['numeroregistro'] ?? '';
+            $row[] = $arrayvalutazione['cn'] ?? '';
+
+            // NAI column
+            $naival = $arrayvalutazione['nai'] ?? null;
+            if ($editmode) {
+                $naielement = 'nai[' . $idvalutazione . ']';
+                $naioptions = [
+                        'type' => 'number',
+                        'name' => $naielement,
+                        'value' => ($naival === null || $naival === "") ? 0 : intval($naival),
+                        'class' => 'form-control statusicons validate-input',
+                        'min' => 0,
+                        'max' => 2,
+                        'step' => 1,
+                        'style' => 'width: 70px; margin: 0 auto; display: block; text-align: right;'
+                ];
+                $row[] = html_writer::empty_tag('input', $naioptions);
+            } else {
+                $row[] = ($naival === null || $naival === "") ? 0 : intval($naival);
+            }
+
+            // includes/includi_calcolo column
+            $includival = $arrayvalutazione['includi_calcolo'] ?? null;
+            if ($includival !== null) {
+                $nomeelemento = 'includi_calcolo[' . $idvalutazione . ']';
+                $selections = [
+                        'Sì' => get_string('yes', 'mod_coripodatacollection'),
+                        'No' => get_string('no', 'mod_coripodatacollection')
+                ];
+                $options = [
+                        'type' => 'number',
+                        'class' => 'form-control statusicons',
+                        'style' => 'height: 25px; width: 70px; padding-top: 0; margin: 0 auto; display: block; text-align: center;'
+                ];
+                $cellatabella = html_writer::select($selections, $nomeelemento, empty($includival) ? 'Sì' : $includival, [], $options);
+                $row[] = $cellatabella;
+            } else {
+                $row[] = '';
+            }
+
+            // Now render remaining columns in original order
             foreach ($arrayvalutazione as $key => $val) {
-                if ($key == 'id' || $key == 'classe' || $key == 'alunno' || $key == 'periodo' || $key == 'erogazione' || $key == 'matematica_trasforma_cifre_errori'
-                        || $key == 'difficolta_prerinforzo' || $key == 'lettura_parolecons_tempo' || $key == 'lettura_parolecons_errori'
-                        || $key == 'scrittura_parolecons_errori' || $key == 'scrittura_paroleort_errori' || $key == 'lettura_modalita') {
+                if (in_array($key, ['id', 'classe', 'alunno', 'periodo', 'erogazione', 'matematica_trasforma_cifre_errori', 'difficolta_prerinforzo',
+                        'lettura_parolecons_tempo', 'lettura_parolecons_errori', 'scrittura_parolecons_errori', 'scrittura_paroleort_errori',
+                        'lettura_modalita', 'numeroregistro', 'cn', 'nai', 'includi_calcolo'])) {
                     continue;
-                } elseif ($key == 'numeroregistro' || $key == 'cn') {
-                    $row[] = $val;
-                } elseif($key == 'includi_calcolo') {
-                    $nomeelemento = $key . '[' . $idvalutazione . ']';
-                    $selections = [
-                            'Sì' => get_string('yes', 'mod_coripodatacollection'),
-                            'No' => get_string('no', 'mod_coripodatacollection')
-                    ];
-                    $options = [
-                            'type' => 'number',
-                            'class' => 'form-control statusicons',
-                            'style' => 'height: 25px; width: 70px; padding-top: 0; margin: 0 auto; display: block; text-align: center;'
-                    ];
-                    $cellatabella = html_writer::select($selections, $nomeelemento,empty($val) ? 'Sì' : $val,
-                            [], $options);
-                    $row[] = $cellatabella;
-                } else {
-                    if ($class->statistichepre == 1 && (property_exists($media_res, $key)) && $valutazione->includi_calcolo == 'Sì') {
+                }
 
-                        $array = [];
-                        foreach ($valutazioni as $obj) {
-                            if ($obj->includi_calcolo == 'Sì')
-                                $array[$obj->id] = $obj->$key;
-                        }
-                        $outlier = $class->outlier_pre == 1 && is_outlier($valutazione->id, $array);
-
-                        $row[] = $this->get_colored_cell($val, $media_res->$key, $stddev_res->$key, $outlier);
+                if ($class->statistichepre == 1 && (property_exists($media_res, $key)) && ($arrayvalutazione['includi_calcolo'] ?? '') == 'Sì') {
+                    $array = [];
+                    foreach ($valutazioni as $obj) {
+                        if ($obj->includi_calcolo == 'Sì')
+                            $array[$obj->id] = $obj->$key;
                     }
-                    else
-                        $row[] = $val;
+                    $outlier = $class->outlier_pre == 1 && is_outlier($valutazione->id, $array);
+                    // Append computed percent or z-score in pre-phase when class statistics are available
+                    $row[] = $this->get_colored_cell($val, $media_res->$key, $stddev_res->$key, $outlier, $key, ($class->statistichepre == 1));
+                } else {
+                    $row[] = $val;
                 }
             }
             $tablerow = new \html_table_row($row);
@@ -431,7 +463,8 @@ class prova_evalview_form extends \moodleform {
                         }
                         $outlier = $class->outlier_post == 1 && is_outlier($valutazione->id, $array);
 
-                        $row[] = $this->get_colored_cell($val, $media_res->$key, $stddev_res->$key, $outlier);
+                        // Do not append computed values in post-phase by default
+                        $row[] = $this->get_colored_cell($val, $media_res->$key, $stddev_res->$key, $outlier, $key, false);
                     }
                     else
                         $row[] = $val;
@@ -731,7 +764,7 @@ class prova_evalview_form extends \moodleform {
 
     }
 
-    private function get_colored_cell($val, $media, $stddev, $outlier) {
+    private function get_colored_cell($val, $media, $stddev, $outlier, $colname = '', $appendcomputed = false, $inverted = false) {
 
         if (is_null( $val )){
             $cell = new html_table_cell();
@@ -739,22 +772,78 @@ class prova_evalview_form extends \moodleform {
             return $cell;
         }
 
-        if ($val < $media + 1.5 * $stddev || $stddev == 0)
-            $color =  'index-color-green';
-        elseif ($val < $media + 1.8 * $stddev)
-            $color = 'index-color-yellow';
-        else
-            $color = 'index-color-red';
+        if (!$inverted) {
+            if ($val < $media + 1.5 * $stddev || $stddev == 0) {
+                $color = 'index-color-green';
+            } else if ($val < $media + 1.8 * $stddev) {
+                $color = 'index-color-yellow';
+            } else {
+                $color = 'index-color-red';
+            }
+        } else {
+            if ($val > $media - 1.5 * $stddev || $stddev == 0) {
+                $color = 'index-color-green';
+            } else if ($val > $media - 1.8 * $stddev) {
+                $color = 'index-color-yellow';
+            } else {
+                $color = 'index-color-red';
+            }
+        }
 
         if ($outlier) {
-            if ($stddev == 0 && $val > $media) {
-                $color = 'index-color-red';
+            if ($stddev == 0) {
+                if ((!$inverted && $val > $media) || ($inverted && $val < $media))
+                    $color = 'index-color-red';
             }
             $color .= ' outlier';
         }
 
         $cell = new html_table_cell();
-        $cell->text = $val;
+        $cell->text = round($val, 2);
+
+        // Optionally compute percentage or z-score depending on column
+        $computed = null;
+        // Manual maxima for percentage-based indices
+        $percent_max = [
+            'lettura_correttezza' => 53,
+            'scrittura_correttezza' => 33,
+            'matematica_correttezza_enumerazione' => 40,
+            'matematica_correttezza_calcolo' => 6,
+            'lettura_numeri' => 9,
+            'enumavanti' => 20,
+            'enumindietro' => 20,
+            'quantita' => 6,
+            'addizioni' => 3,
+            'sottrazioni' => 3,
+            'confronto' => 6
+        ];
+
+        $time_based = [
+            'lettura_rapidita',
+            'lettura_sublessicale',
+            'lettura_lessicale',
+            'lettura_media'
+        ];
+
+        if (!empty($colname) && $appendcomputed) {
+            if (array_key_exists($colname, $percent_max)) {
+                $max = $percent_max[$colname];
+                if ($max > 0) {
+                    $computed = round(($val / $max) * 100, 1) . '%';
+                }
+            } else if (in_array($colname, $time_based) || strpos($colname, 'tempo') !== false) {
+                if ($stddev != 0) {
+                    $z = ($val - $media) / $stddev;
+                    $computed = 'z=' . round($z, 2);
+                } else {
+                    $computed = 'z=N/A';
+                }
+            }
+        }
+
+        if (!is_null($computed))
+            $cell->text .= ' | ' . $computed;
+
         $cell->attributes = ['class' => $color];
         return $cell;
     }
@@ -779,7 +868,7 @@ class prova_evalview_form extends \moodleform {
                 unset($data['listaIDvalutazioni']);
                 $arraynuovirisultati = [];
                 foreach ($idvalutazioni as $id) {
-                    $nuovorisultato = ['id' => $id, 'includi_calcolo' => $data['includi_calcolo'][$id]];
+                    $nuovorisultato = ['id' => $id, 'includi_calcolo' => $data['includi_calcolo'][$id] ?? null, 'nai' => isset($data['nai'][$id]) ? intval($data['nai'][$id]) : null];
                     $arraynuovirisultati[] = (object)$nuovorisultato;
                 }
                 return $arraynuovirisultati;
